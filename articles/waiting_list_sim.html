@@ -138,32 +138,34 @@ waiting time to meet our target:</p>
 <span><span class="va">target_mean_wait</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_target_mean_wait.html">calc_target_mean_wait</a></span><span class="op">(</span><span class="fl">18</span>, <span class="va">qt92</span><span class="op">)</span></span>
 <span><span class="va">target_mean_wait</span></span>
 <span><span class="co">#&gt; [1] 7.126656</span></span></code></pre></div>
-<p>This makes our target average wait 7.1266563 weeks, and this average
-is regardless of demand/capacity queue size. The average wait must be
-this value, or less to meet 92% at 18 weeks.</p>
+<p>This makes our target average wait 7.13 weeks, and this average
+independent of any demand/capacity. The average wait must be this value,
+or less, to meet 92% at 18 weeks.</p>
 </div>
 <div class="section level2">
 <h2 id="bringing-down-a-waiting-list">1. Bringing down a waiting list<a class="anchor" aria-label="anchor" href="#bringing-down-a-waiting-list"></a>
 </h2>
 <p><a href="#">Back to top…</a></p>
-<p>For our first scenario, let’s assume the service received 100 weekly
-referrals and has a weekly capacity of 80 appointments. We describe this
-balance between demand and capacity as the ‘Load’, which is the ratio
-between demand and capacity: 100/80= 1.25. If the Load is greater than
-1, then the waiting list will grow, and if it is less than 1 the waiting
-list will reduce. Let’s imagine our service is already running with a
-waiting list of 840. There are few ways to set this up, including
-supplying a real waiting list, simulate/generate it using the properties
-of the list, or we can manually dump a load of open pathways into the
-start of the simulation.</p>
-<p>Below we simulate one based on knowing the 840 on this list, and 20
-more referrals than removals per week (difference in demand and
-capacity) adds 20 to the waiting list each week. If we divide the 840 on
-the waiting list by 20, we get 42 weeks. We need to run the simulation
-for 42 weeks (with the stated demand and capacity to generate a waiting
-list of 840). <strong><em>Remember that this is simulation, so it is
-stochastic. Any two runs will not be identical, but will lead to 840 on
-list on average.</em></strong></p>
+<p>For our first scenario, we will assume the service received 100
+weekly referrals and has a weekly capacity of 80 appointments. We
+describe this balance between demand and capacity as the ‘Load’, which
+is the ratio between demand and capacity: 100/80= 1.25. If the Load is
+greater than 1, then the waiting list will grow, and if it is less than
+1 the waiting list will reduce. Let’s imagine our service is already
+running with a waiting list of 840. There are few ways to set this up,
+including supplying a real waiting list, simulate/generate it using the
+properties of the list, or we can manually dump a load of open pathways
+into the start of the simulation.</p>
+<p>In the example below we simulate the current waiting list based on
+knowing that there are 840 on it, and 20 more referrals than removals
+per week (difference in demand and capacity): this means it will add 20
+to the waiting list each week. If we divide that 840 on the waiting list
+by 20, we get 42 1weeks.<br><strong>We therefore need to run the simulation for 42 weeks, with the
+stated demand and capacity, to generate a waiting list of
+840).</strong></p>
+<p><em>Remember that this is simulation, so it is stochastic. Any two
+runs will not be identical, but will lead to 840 on list on
+average.</em></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">end_date</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2023-03-31"</span><span class="op">)</span></span>
 <span></span>
@@ -187,8 +189,9 @@ list on average.</em></strong></p>
 <span><span class="co">#&gt; 292 2023-03-29        738</span></span>
 <span><span class="co">#&gt; 293 2023-03-30        738</span></span>
 <span><span class="co">#&gt; 294 2023-03-31        759</span></span></code></pre></div>
-<p>Below, we manually dump 840 open pathways into the sim the day before
-our start.</p>
+<p>As an alternative, we could manually dump 840 open pathways into the
+current waiting list the day before our start date for the main
+simulation.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">current_wl1</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -204,18 +207,18 @@ our start.</p>
 <h3 id="what-is-the-target-for-this-service">What is the target for this service?<a class="anchor" aria-label="anchor" href="#what-is-the-target-for-this-service"></a>
 </h3>
 <p>If we are governing our resources well, we want to allow a
-sustainable queue as this allows people to be flexibly scheduled whilst
-still meeting our targets. All capacity comes at a cost to the system,
-so we are seeking a balance between demand and capacity with a
+sustainable queue as this allows patients to be flexibly scheduled
+whilst still meeting our targets. All capacity comes at a cost to the
+system, so we are seeking a balance between demand and capacity with a
 sustainable waiting list.</p>
 <p>So our question is: what is the sustainable queue size for delivering
-92% at 18 weeks, given 100 weekly demand.</p>
+92% at 18 weeks, given 100 weekly demand?</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">target_queue1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_target_queue_size.html">calc_target_queue_size</a></span><span class="op">(</span>demand <span class="op">=</span> <span class="fl">100</span>, </span>
-<span>                                        target_wait <span class="op">=</span> <span class="fl">18</span>, factor <span class="op">=</span> <span class="va">qt92</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">target_queue1</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/calc_target_queue_size.html">calc_target_queue_size</a></span><span class="op">(</span>demand <span class="op">=</span> <span class="fl">100</span>, target_wait <span class="op">=</span> <span class="fl">18</span>, factor <span class="op">=</span> <span class="va">qt92</span><span class="op">)</span></span>
 <span><span class="va">target_queue1</span></span>
 <span><span class="co">#&gt; [1] 712.6656</span></span></code></pre></div>
-<p>We have a target queue size of 712.6656318, and currently running a
+<p>We have a target queue size of 712.67, and currently running a
 waiting list in excess of this, and load is &gt;1, so the list will keep
 growing, without intervention, and average wait times will get
 longer.</p>
@@ -233,7 +236,7 @@ in”)</p>
 offers 25 more slots per week, taking our waiting list pressure down. We
 need to remember to include our waiting list into the simulation
 function, so it does not start from zero. We will run the simulation for
-a two year period then plot the waiting list.</p>
+one year then plot the waiting list.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">raised_capacity_wl</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/wl_simulator.html">wl_simulator</a></span><span class="op">(</span>start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2023-04-01"</span><span class="op">)</span>,</span>
@@ -252,11 +255,47 @@ a two year period then plot the waiting list.</p>
 <span><span class="co">#&gt; 365 2024-03-29        567</span></span>
 <span><span class="co">#&gt; 366 2024-03-30        560</span></span>
 <span><span class="co">#&gt; 367 2024-03-31        580</span></span></code></pre></div>
+</div>
+<div class="section level4">
+<h4 id="reducing-demand">Reducing demand<a class="anchor" aria-label="anchor" href="#reducing-demand"></a>
+</h4>
+<p>Instead of raising capacity, let’s imagine we have put in new
+referral guidance that reduces the number of referrals coming in to the
+system, resulting in 5 fewer referrals per week. Again, we need to
+remember to include our waiting list into the simulation function, so it
+does not start from zero. We will run the simulation for one year then
+plot the waiting list.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">reduced_demand_wl</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/wl_simulator.html">wl_simulator</a></span><span class="op">(</span>start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2023-04-01"</span><span class="op">)</span>,</span>
+<span>               end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-03-31"</span><span class="op">)</span>,</span>
+<span>               demand <span class="op">=</span> <span class="fl">95</span>,</span>
+<span>               capacity <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>               waiting_list <span class="op">=</span> <span class="va">current_wl1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">reduced_demand_queue</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wl_queue_size.html">wl_queue_size</a></span><span class="op">(</span><span class="va">reduced_demand_wl</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">reduced_demand_queue</span><span class="op">)</span></span>
+<span><span class="co">#&gt;          dates queue_size</span></span>
+<span><span class="co">#&gt; 362 2024-03-26        697</span></span>
+<span><span class="co">#&gt; 363 2024-03-27        693</span></span>
+<span><span class="co">#&gt; 364 2024-03-28        693</span></span>
+<span><span class="co">#&gt; 365 2024-03-29        695</span></span>
+<span><span class="co">#&gt; 366 2024-03-30        698</span></span>
+<span><span class="co">#&gt; 367 2024-03-31        709</span></span></code></pre></div>
 <p>To visualise this, we will plot the queue against time, marking the
 target queue size.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">raised_capacity_queue</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">queue_size</span>, x <span class="op">=</span> <span class="va">dates</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">combine_queue</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">raised_capacity_queue</span>, type <span class="op">=</span> <span class="st">"raised capacity"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">reduced_demand_queue</span>, type <span class="op">=</span> <span class="st">"reduced demand"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">combine_queue</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">queue_size</span>, x <span class="op">=</span> <span class="va">dates</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>linetype <span class="op">=</span> <span class="va">type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="va">target_queue1</span>, colour <span class="op">=</span> <span class="st">"#440154FF"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html" class="external-link">annotate</a></span><span class="op">(</span><span class="st">"text"</span>, label <span class="op">=</span> <span class="st">"Target queue size"</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-03-31"</span><span class="op">)</span></span>
 <span>           , y <span class="op">=</span> <span class="va">target_queue1</span>, vjust <span class="op">=</span> <span class="fl">1.2</span></span>
@@ -269,9 +308,10 @@ the end of the year (31st December), would return the waiting list to
 just below the sustainable target.</p>
 </div>
 </div>
-<div class="section level3">
-<h3 id="our-waiting-list-can-afford-to-grow">2. Our waiting list can afford to grow<a class="anchor" aria-label="anchor" href="#our-waiting-list-can-afford-to-grow"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="our-waiting-list-can-afford-to-grow">2. Our waiting list can afford to grow<a class="anchor" aria-label="anchor" href="#our-waiting-list-can-afford-to-grow"></a>
+</h2>
 <p><a href="#">Back to top…</a></p>
 <p>On the surface, we might assume that growing a waiting list is always
 a bad thing. When dealing with a health economy, we must consider the <a href="https://en.wikipedia.org/wiki/Opportunity_cost" class="external-link">‘opportunity
@@ -286,7 +326,7 @@ queue to grow or reduce. We, again, have the same target of 92% within
 18 weeks (as per example 1). This means our target average waiting time
 would be 7.1266563. We will</p>
 <p>Let’s first calculate our target queue length:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">target_queue2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_target_queue_size.html">calc_target_queue_size</a></span><span class="op">(</span>demand <span class="op">=</span> <span class="fl">50</span></span>
 <span>                                        , target_wait <span class="op">=</span> <span class="fl">18</span>, factor <span class="op">=</span> <span class="va">qt92</span><span class="op">)</span></span>
 <span><span class="va">target_queue2</span></span>
@@ -295,7 +335,7 @@ would be 7.1266563. We will</p>
 means we can afford to let our queue size increase to 274.3328159.</p>
 <p>If we are willing to let our waiting list grow over the next 6
 months, this equates to:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">current_queue</span> <span class="op">&lt;-</span> <span class="fl">82</span> </span>
 <span><span class="va">queue_growth</span> <span class="op">&lt;-</span> <span class="va">target_queue2</span> <span class="op">-</span> <span class="va">current_queue</span></span>
 <span><span class="va">weeks_to_grow</span> <span class="op">&lt;-</span> <span class="fl">26</span> <span class="co">#52 weeks per year / 2 for 6 months</span></span>
@@ -310,7 +350,7 @@ growth to 10.</p>
 <p>We can then verify it using simulation, following the steps in
 example 1.: set up the waiting list, then simulate with our
 parameters:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">current_wl2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Referral <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-03-31"</span><span class="op">)</span>, <span class="va">current_queue</span><span class="op">)</span></span>
 <span>                          , Removal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="cn">NA</span><span class="op">)</span>, <span class="va">current_queue</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
@@ -333,7 +373,6 @@ parameters:</p>
 <span>       , title <span class="op">=</span> <span class="st">"Simulated waiting list after allowing waiting list to grow"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="waiting_list_sim_files/figure-html/example_2-1.png" width="768"></p>
 </div>
-</div>
 <div class="section level2">
 <h2 id="how-our-list-will-change-with-predicted-populationreferral-growth">3. How our list will change with predicted population/referral
 growth<a class="anchor" aria-label="anchor" href="#how-our-list-will-change-with-predicted-populationreferral-growth"></a>
@@ -351,7 +390,7 @@ per week, 100 capacity per week, and a waiting list of 500. We will do
 our range calculations for the sustainable lists, assuming a slightly
 different target from the first 2 examples: 95% should be seen within 18
 weeks.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Target mean wait for 95% at 18 weeks</span></span>
 <span><span class="va">target_mean_wait3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_target_mean_wait.html">calc_target_mean_wait</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">qexp</a></span><span class="op">(</span><span class="fl">0.95</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">target_mean_wait3</span></span>
@@ -366,7 +405,7 @@ is only true at the start of the period. Given our growth and change
 assumptions, we need to construct a control table that maps these values
 out to power the simulation. This is worked out below in R, but users
 may find it easier to build in a spreadsheet application.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ctrl_tbl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2024-04-01"</span>, <span class="st">"2025-04-01"</span>, <span class="st">"2026-04-01"</span></span>
 <span>                         , <span class="st">"2027-04-01"</span>,<span class="st">"2028-04-01"</span><span class="op">)</span>, format <span class="op">=</span> <span class="st">"%Y-%m-%d"</span><span class="op">)</span>,</span>
@@ -378,7 +417,7 @@ may find it easier to build in a spreadsheet application.</p>
 <span></span>
 <span><span class="co"># Manually setting sim properties to illustrate:</span></span>
 <span><span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">demand</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">demand</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">*</span> <span class="fl">1.05</span></span>
-<span><span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">demand</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">demand</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="fl">1.05</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.8</span> <span class="co"># 5% growth, 20% reduction from intervention</span></span>
+<span><span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">demand</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">demand</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span> <span class="op">*</span> <span class="fl">1.05</span><span class="op">)</span> <span class="op">*</span> <span class="fl">0.8</span> <span class="co"># 5% growth, 20% reduction</span></span>
 <span><span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">demand</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">demand</span><span class="op">[</span><span class="fl">3</span><span class="op">]</span> <span class="op">*</span> <span class="fl">1.05</span></span>
 <span><span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">demand</span><span class="op">[</span><span class="fl">5</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">demand</span><span class="op">[</span><span class="fl">4</span><span class="op">]</span> <span class="op">*</span> <span class="fl">1.05</span></span>
 <span></span>
@@ -393,18 +432,18 @@ may find it easier to build in a spreadsheet application.</p>
 based on the current demand, the yearly demand or by the anticipated
 demand at the last period. Here, we will take the second approach, but
 this requires a calculation for each row.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">target_queue_size</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_target_queue_size.html">calc_target_queue_size</a></span><span class="op">(</span>demand <span class="op">=</span> <span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">demand</span></span>
 <span>                                                     , target_wait <span class="op">=</span> <span class="fl">18</span></span>
 <span>                                                     , factor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">qexp</a></span><span class="op">(</span><span class="fl">0.95</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">current_wl3</span> <span class="op">&lt;-</span> </span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Referral <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-03-31"</span><span class="op">)</span>, <span class="fl">500</span><span class="op">)</span></span>
 <span>             , Removal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="cn">NA</span><span class="op">)</span>, <span class="fl">500</span><span class="op">)</span></span>
 <span>             <span class="op">)</span></span></code></pre></div>
 <p>We then run the first line of the table through the simulation. with
 the current waiting list:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim3_period1</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/wl_simulator.html">wl_simulator</a></span><span class="op">(</span>start_date <span class="op">=</span> <span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">start_date</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span>               , end_date <span class="op">=</span> <span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">end_date</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
@@ -413,7 +452,7 @@ the current waiting list:</p>
 <span>               , waiting_list <span class="op">=</span> <span class="va">current_wl3</span><span class="op">)</span></span></code></pre></div>
 <p>We can now loop through the rest of the table using a mechanism such
 as a loop:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Loop through and simulate each section</span></span>
 <span><span class="co"># Loop pick up each previous waiting list</span></span>
 <span><span class="co"># using the 'eval(call("&lt;-")...) allows dynamic naming for each loop</span></span>
@@ -439,7 +478,7 @@ connects this points with a straight line. * Depending on the variation
 in the simulation, the waiting list peaks above the sustainable target
 value in 2025/26, before the demand reduction pulls this list back down
 to a sustainable size.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">queue_over_time</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">queue_size</span>, x <span class="op">=</span> <span class="va">dates</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">target_queue_size</span> , x <span class="op">=</span> <span class="va">start_date</span><span class="op">)</span></span>
@@ -472,7 +511,7 @@ the values.</p>
 method wraps the simulation and the queue size functions in inside a
 function. This means that each run will return a data.frame of daily
 queue sizes.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim_func</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span><span class="op">{</span></span>
 <span>  <span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/wl_simulator.html">wl_simulator</a></span><span class="op">(</span>start_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2023-04-01"</span><span class="op">)</span>,</span>
 <span>                      end_date <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="st">"2024-03-31"</span><span class="op">)</span>,</span>
@@ -492,7 +531,7 @@ This will not always be the right approach, but it depends on your
 question. In this case, it helps give a more robust estimate of the
 average effects and allows us to put percentile or confidence interval
 ranges around them.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mc_bind</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="st">"rbind"</span>, <span class="va">raised_capacity_wl_mc</span><span class="op">)</span></span>
 <span><span class="va">mc_agg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">queue_size</span><span class="op">~</span><span class="va">dates</span>, data <span class="op">=</span> <span class="va">mc_bind</span></span>
 <span>                    , FUN <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
@@ -508,7 +547,7 @@ ranges around them.</p>
 <span><span class="va">mc_agg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>dates<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/as.Date.html" class="external-link">as.Date</a></span><span class="op">(</span><span class="va">mc_agg</span><span class="op">$</span><span class="va">dates</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">mc_agg</span><span class="op">$</span><span class="va">queue_size</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We can now produce a similar plot to the one in section 1, but using
 the average value and 95% confidence interval.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">mc_agg</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">mean_q</span>, x <span class="op">=</span> <span class="va">dates</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">lower_95CI</span>, ymax <span class="op">=</span> <span class="va">upper_95CI</span><span class="op">)</span></span>
