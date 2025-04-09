@@ -273,22 +273,24 @@ capacity required to maintain equilibrium.</p>
 <span></span>
 <span><span class="va">target_capacity_1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_target_capacity.html">calc_target_capacity</a></span><span class="op">(</span></span>
 <span>  demand <span class="op">=</span> <span class="va">demand</span>,</span>
-<span>  target_wait <span class="op">=</span> <span class="va">waiting_time_target</span></span>
+<span>  target_wait <span class="op">=</span> <span class="va">waiting_time_target</span>,</span>
+<span>  factor <span class="op">=</span> <span class="va">f_1</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">target_capacity_1</span></span>
-<span><span class="co">#&gt; [1] 30.07692</span></span></code></pre></div>
-<p>If F is 1, we can see that the capacity required is 30.08, or 0.08
+<span><span class="co">#&gt; [1] 30.01923</span></span></code></pre></div>
+<p>If F is 1, we can see that the capacity required is 30.02, or 0.02
 more than the demand.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">f_2</span> <span class="op">&lt;-</span> <span class="fl">6.58</span></span>
 <span></span>
 <span><span class="va">target_capacity_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_target_capacity.html">calc_target_capacity</a></span><span class="op">(</span></span>
 <span>  demand <span class="op">=</span> <span class="va">demand</span>,</span>
-<span>  target_wait <span class="op">=</span> <span class="va">waiting_time_target</span></span>
+<span>  target_wait <span class="op">=</span> <span class="va">waiting_time_target</span>,</span>
+<span>  factor <span class="op">=</span> <span class="va">f_2</span></span>
 <span><span class="op">)</span></span>
 <span><span class="va">target_capacity_2</span></span>
-<span><span class="co">#&gt; [1] 30.07692</span></span></code></pre></div>
-<p>If F is 6.58, we can see that the capacity required is 30.08, or 0.08
+<span><span class="co">#&gt; [1] 30.12654</span></span></code></pre></div>
+<p>If F is 6.58, we can see that the capacity required is 30.13, or 0.13
 more than the demand.</p>
 <p>So, decreasing variability of service (for example by stabilising
 operating theatre schedules from day to day and week to week) has the
