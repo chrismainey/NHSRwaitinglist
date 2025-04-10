@@ -91,25 +91,26 @@ change), allows us to ask these questions and test out hypotheses.</p>
 a waiting list for a UK NHS hospital for a surgical speciality. The
 process might have the flow such as:</p>
 <ul>
-<li>a patient presents to General Practise (GP)</li>
-<li>a GP refers the patient a hospital ‘outpatients clinic’</li>
+<li>a patient presents to General Practice (GP)</li>
+<li>a GP refers the patient a hospital ‘outpatients’ clinic</li>
 <li>the clinician in the clinic lists the patient for surgery (entering
 the waiting list)</li>
 <li>Once the patient has receive their surgery, they leave the waiting
-list. We will consider this against an 18 week standard for waiting
-times.</li>
+list.</li>
 </ul>
+<p>We will consider this against an 18 week standard for waiting
+times.</p>
 <div class="section level4">
 <h4 id="scenarios">Scenarios<a class="anchor" aria-label="anchor" href="#scenarios"></a>
 </h4>
-<p>We will imagine three scenarios below, where we want to simulate into
-the future:</p>
+<p>We will imagine three scenarios where we want to use simulation to
+project our waiting list into the future:</p>
 <ol style="list-style-type: decimal">
 <li>where we need to bring a high waiting list down into control</li>
 <li>where our waiting list can afford to grow (e.g. we want to constrain
 capacity, such as sub-contracted care at other organisations)</li>
-<li>how our list will change with predicted population/referral growth
-and a service change</li>
+<li>how our list will change with referral growth and a service
+change</li>
 </ol>
 <p><strong>Please remember that the examples here are simulations. They
 will vary due to chance each time they are run, and that is their
@@ -151,19 +152,23 @@ weekly referrals and has a weekly capacity of 80 appointments. We
 describe this balance between demand and capacity as the ‘Load’, which
 is the ratio between demand and capacity: 100/80= 1.25. If the Load is
 greater than 1, then the waiting list will grow, and if it is less than
-1 the waiting list will reduce. Let’s imagine our service is already
-running with a waiting list of 840. There are few ways to set this up,
-including supplying a real waiting list, simulate/generate it using the
-properties of the list, or we can manually dump a load of open pathways
-into the start of the simulation.</p>
+1 the waiting list will reduce.</p>
+<p>Let’s imagine our service is already running with a waiting list of
+840.</p>
+<p>For simulation purposes, we need to set up the current waiting list
+before we can run the simulation of the future state. There are few ways
+to set this up, including supplying a real waiting list,
+simulate/generate it using the properties of the list, or we can
+manually dump a load of open pathways into the start of the
+simulation.</p>
 <p>In the example below we simulate the current waiting list based on
 knowing that there are 840 on it, and 20 more referrals than removals
 per week (difference in demand and capacity): this means it will add 20
 to the waiting list each week. If we divide that 840 on the waiting list
-by 20, we get 42 1weeks.</p>
+by 20, we get 42 weeks.</p>
 <p><strong>We therefore need to run the simulation for 42 weeks, with
 the stated demand and capacity, to generate a waiting list of
-840).</strong></p>
+840.</strong></p>
 <p><em>Remember that this is simulation, so it is stochastic. Any two
 runs will not be identical, but will lead to 840 on list on
 average.</em></p>
@@ -210,8 +215,9 @@ simulation.</p>
 <p>If we are governing our resources well, we want to allow a
 sustainable queue as this allows patients to be flexibly scheduled
 whilst still meeting our targets. All capacity comes at a cost to the
-system, so we are seeking a balance between demand and capacity with a
-sustainable waiting list.</p>
+system, so we are seeking a balance between demand and capacity, with a
+sustainable waiting list where people are seen within a given target
+time.</p>
 <p>So our question is: what is the sustainable queue size for delivering
 92% at 18 weeks, given 100 weekly demand?</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -227,11 +233,13 @@ longer.</p>
 <div class="section level3">
 <h3 id="options-for-management">Options for management<a class="anchor" aria-label="anchor" href="#options-for-management"></a>
 </h3>
-<p>There are two ways to bring a waiting list like this down: 1. Raise
-the capacity (“more flowing out”) 2. Reduce the demand (“fewer flowing
-in”)</p>
+<p>There are two ways to bring a waiting list like this down:</p>
+<ol style="list-style-type: decimal">
+<li>Raise the capacity (“more flowing out”)</li>
+<li>Reduce the demand (“fewer flowing in”)</li>
+</ol>
 <div class="section level4">
-<h4 id="raising-capacity">Raising capacity<a class="anchor" aria-label="anchor" href="#raising-capacity"></a>
+<h4 id="raising-capacity">1. Raising capacity<a class="anchor" aria-label="anchor" href="#raising-capacity"></a>
 </h4>
 <p>Let’s imagine we are able to put an additional clinic in place that
 offers 25 more slots per week, taking our waiting list pressure down. We
@@ -258,7 +266,7 @@ one year then plot the waiting list.</p>
 <span><span class="co">#&gt; 367 2024-03-31        580</span></span></code></pre></div>
 </div>
 <div class="section level4">
-<h4 id="reducing-demand">Reducing demand<a class="anchor" aria-label="anchor" href="#reducing-demand"></a>
+<h4 id="reducing-demand">2. Reducing demand<a class="anchor" aria-label="anchor" href="#reducing-demand"></a>
 </h4>
 <p>Instead of raising capacity, let’s imagine we have put in new
 referral guidance that reduces the number of referrals coming in to the
@@ -318,16 +326,18 @@ sustainable target.</p>
 <p>On the surface, we might assume that growing a waiting list is always
 a bad thing. When dealing with a health economy, we must consider the <a href="https://en.wikipedia.org/wiki/Opportunity_cost" class="external-link">‘opportunity
 cost’</a>: what benefits we forgo by using our resources in one place
-rather than another. This could mean that we increase a waiting list,
-within an acceptable limit, and release resources/staff/funding to be
-used elsewhere. So our task here is to work out how large the waiting
-list can grow, and set a time period to do it over.</p>
+rather than another. When applied to a large, complex health economy,
+this might mean we increase a waiting list, within an acceptable limit,
+in order to release resources/staff/funding to be used elsewhere. So our
+task here is to work out how large the waiting list can grow whilst
+still meeting target, setting a time period to do it over, then reducing
+capacity accordingly.</p>
 <p>In this scenario, we will consider a system with 50 referrals per
 week, 50 capacity per week, and a current waiting list of 82. We have a
-queue load of 1, so baring natural fluctuation, we would not expect our
-queue to grow or reduce. We, again, have the same target of 92% within
-18 weeks (as per example 1). This means our target average waiting time
-would be 7.13.</p>
+queue load of 1 so, baring natural fluctuation, we would not expect our
+queue to grow or reduce. We have the same target as in scenario 1.: 92%
+within 18 weeks. This means our target average waiting time would be
+7.13.</p>
 <p>Let’s first calculate our target queue length:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">target_queue2</span> <span class="op">&lt;-</span></span>
@@ -351,8 +361,8 @@ sensible to make the conservative rounding choice that leads to the
 lower queue growth. In this case it is to <code><a href="https://rdrr.io/r/base/Round.html" class="external-link">floor()</a></code> the
 growth to 10.</p>
 <p>We can then verify this using simulation, following the steps in
-example 1.: set up the waiting list, then simulate with our parameters,
-then plot:</p>
+example 1.: set up the waiting list, simulate with our parameters, then
+plot:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">current_wl2</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -379,22 +389,22 @@ then plot:</p>
 <p><img src="waiting_list_sim_files/figure-html/example_2-1.png" width="768"></p>
 </div>
 <div class="section level2">
-<h2 id="how-our-list-will-change-with-predicted-populationreferral-growth">3. How our list will change with predicted population/referral
-growth<a class="anchor" aria-label="anchor" href="#how-our-list-will-change-with-predicted-populationreferral-growth"></a>
+<h2 id="how-our-list-will-change-with-referral-growth-service-change">3. How our list will change with referral growth / service
+change<a class="anchor" aria-label="anchor" href="#how-our-list-will-change-with-referral-growth-service-change"></a>
 </h2>
 <p>This more complex example, and we will make two assumptions over a
 5-year modelling period:</p>
 <ol style="list-style-type: decimal">
-<li>That referrals will grow 5% per year</li>
+<li>Referrals will grow 5% per year</li>
 <li>In year 3, a service change will come into place that removes 20% of
 the referrals.</li>
 </ol>
 <p>To simulate this, we will need to set up our data inputs to reflect
 the assumptions. We will set up a scenario starting with 100 referrals
 per week, 100 capacity per week, and a waiting list of 500. We will do
-our range calculations for the sustainable lists, assuming a slightly
-different target from the first 2 examples: 95% should be seen within 18
-weeks.</p>
+our range calculations for the sustainable list size, assuming a
+slightly different target from the first 2 examples: 95% should be seen
+within 18 weeks.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Target mean wait for 95% at 18 weeks</span></span>
 <span><span class="va">target_mean_wait3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_target_mean_wait.html">calc_target_mean_wait</a></span><span class="op">(</span><span class="fl">18</span>, <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">qexp</a></span><span class="op">(</span><span class="fl">0.95</span><span class="op">)</span><span class="op">)</span></span>
@@ -405,8 +415,8 @@ weeks.</p>
 <span>  <span class="fu"><a href="../reference/calc_target_queue_size.html">calc_target_queue_size</a></span><span class="op">(</span>demand <span class="op">=</span> <span class="fl">100</span>, target_wait <span class="op">=</span> <span class="fl">18</span>, factor <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html" class="external-link">qexp</a></span><span class="op">(</span><span class="fl">0.95</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">target_queue3</span></span>
 <span><span class="co">#&gt; [1] 600.8548</span></span></code></pre></div>
-<p>In this case ours sustainable waiting list is 600.8547613, but this
-is only true at the start of the period. Given our growth and change
+<p>In this case ours sustainable waiting list is 600.85, but this is
+only true at the start of the period. Given our growth and change
 assumptions, we need to construct a control table that maps these values
 out to power the simulation. This is worked out below in R, but users
 may find it easier to build in a spreadsheet application.</p>
@@ -477,13 +487,17 @@ as a loop:</p>
 <span></span>
 <span><span class="va">queue_over_time</span> <span class="op">&lt;-</span>  <span class="fu"><a href="../reference/wl_queue_size.html">wl_queue_size</a></span><span class="op">(</span><span class="va">sim3_period5</span><span class="op">)</span></span></code></pre></div>
 <p>We can now plot and see what our list looks like. Key points to note
-are: * The target queue size is calculated at each
+are:</p>
+<ul>
+<li><p>The target queue size is calculated at each
 <code>start_date</code>, i.e. 1st April, and the way the lines are draw
-connects this points with a straight line. * Depending on the variation
-in the simulation, the waiting list peaks above the sustainable target
-value in 2025/26, before the demand reduction pulls this list back down
-to a sustainable size. * We have a case for releasing some capacity from
-late 2026 onwards, as our list is of a sustainable size.</p>
+connects this points with a straight line.</p></li>
+<li><p>Depending on the variation in the simulation, the waiting list
+peaks above the sustainable target value in 2025/26, before the demand
+reduction pulls this list back down to a sustainable size.</p></li>
+<li><p>We have a case for releasing some capacity from late 2026
+onwards, as our list is of a sustainable size.</p></li>
+</ul>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">queue_over_time</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">queue_size</span>, x <span class="op">=</span> <span class="va">dates</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
