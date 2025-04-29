@@ -471,7 +471,7 @@ waiting list:</p>
 <span><span class="va">sim3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">NROW</a></span><span class="op">(</span><span class="va">ctrl_tbl</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Run the first line and current waiting list</span></span>
-<span><span class="va">sim3</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> </span>
+<span><span class="va">sim3</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/wl_simulator.html">wl_simulator</a></span><span class="op">(</span>start_date <span class="op">=</span> <span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">start_date</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span>               , end_date <span class="op">=</span> <span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">end_date</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
 <span>               , demand <span class="op">=</span> <span class="va">ctrl_tbl</span><span class="op">$</span><span class="va">demand</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
@@ -549,7 +549,7 @@ queue sizes.</p>
 <span>                      demand <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>                      capacity <span class="op">=</span> <span class="fl">105</span>,</span>
 <span>                      waiting_list <span class="op">=</span> <span class="va">current_wl1</span><span class="op">)</span></span>
-<span>                      </span>
+<span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="fu"><a href="../reference/wl_queue_size.html">wl_queue_size</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span>, <span class="va">run_id</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
