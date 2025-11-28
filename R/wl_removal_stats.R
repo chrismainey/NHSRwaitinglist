@@ -24,6 +24,7 @@
 #'     list over the full time period.}
 #' }
 #'
+#'
 #' @export
 #'
 #' @examples
@@ -77,7 +78,7 @@ wl_removal_stats <- function(waiting_list,
   ), ]
 
   rownames(removals_and_zeros) <- NULL
-  removals_and_zeros$lag_dates <- dplyr::lag(removals_and_zeros$dates)
+  removals_and_zeros$lag_dates <- shift(removals_and_zeros$dates, n = 1L)
   if (is.na(removals_and_zeros[1, ]$lag_dates)) {
     removals_and_zeros[1, ]$lag_dates <- start_date
   }

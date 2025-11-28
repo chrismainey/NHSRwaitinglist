@@ -9,7 +9,8 @@ wl_schedule(
   schedule,
   referral_index = 1,
   removal_index = 2,
-  unscheduled = FALSE
+  unscheduled = FALSE,
+  restore_types = TRUE
 )
 }
 \arguments{
@@ -28,6 +29,9 @@ removal dates}
 \item{unscheduled}{logical.
 If TRUE, returns a list of scheduled and unscheduled procedures
 If FALSE, only returns the updated waiting list}
+
+\item{restore_types}{Internal function to restore types exactly to previous
+version in testing}
 }
 \value{
 The updated waiting list with removal dates assigned based on

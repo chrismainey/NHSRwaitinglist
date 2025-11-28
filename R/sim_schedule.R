@@ -14,20 +14,18 @@
 #'
 
 sim_schedule <- function(
-  n_rows = 10,
-  start_date = NULL,
-  daily_capacity = 1
+    n_rows = 10,
+    start_date = NULL,
+    daily_capacity = 1
 ) {
-  if (is.null(start_date)) {
-    start_date <- Sys.Date()
-  }
+  if (is.null(start_date)) start_date <- Sys.Date()
 
-  schedule <-
-    as.Date(
-      as.numeric(start_date) +
-        ceiling(seq(0, n_rows - 1, 1 / daily_capacity)),
-      origin = "1970-01-01"
-    )
+  # Original logic: ceiling(seq(0, n_rows - 1, by = 1 / daily_capacity))
+  # Vectorized equivalent:
+  offsets <- ceiling(seq(0, n_rows - 1, by = 1 / daily_capacity))
+
+  # Add offsets to start_date
+  schedule <- start_date + offsets
 
   return(schedule)
 }

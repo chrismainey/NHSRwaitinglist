@@ -44,7 +44,6 @@
 #'   \item{Consultant}{Character. Consultant name in the format
 #'     \code{"Last, First"}.}
 #'
-#' @import dplyr
 #' @importFrom stats rgeom
 #' @export
 #'
@@ -55,14 +54,14 @@
 #' under_capacity_simulation <-
 #'   wl_simulator("2024-01-01", "2024-03-31", 100, 90)
 #'
-wl_simulator <- function(
-  start_date = NULL,
-  end_date = NULL,
-  demand = 10,
-  capacity = 11,
-  waiting_list = NULL,
-  withdrawal_prob = NA_real_,
-  detailed_sim = FALSE
+wl_simulator <-     function(
+    start_date = NULL,
+    end_date = NULL,
+    demand = 10,
+    capacity = 11,
+    waiting_list = NULL,
+    withdrawal_prob = NA_real_,
+    detailed_sim = FALSE
 ) {
 
   check_date(start_date, end_date, .allow_null = TRUE)

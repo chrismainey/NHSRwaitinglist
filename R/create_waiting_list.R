@@ -37,6 +37,7 @@
 #'
 #' @export
 #'
+#'
 #' @examples create_waiting_list(366, 50, 21, "2024-01-01", 10, 0.1)
 #'
 create_waiting_list <- function(n, mean_arrival_rate, mean_wait,
@@ -91,5 +92,5 @@ create_waiting_list <- function(n, mean_arrival_rate, mean_wait,
     )
   ]
 
-  return(dplyr::as_tibble(c(dots, test_df)))
+  return(as.data.frame(c(dots, test_df)))
 }

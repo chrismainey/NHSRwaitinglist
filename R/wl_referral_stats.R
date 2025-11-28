@@ -24,6 +24,8 @@
 #'
 #' @export
 #'
+#' @importFrom stats sd
+#'
 #' @examples
 #' referrals <- c.Date("2024-01-01", "2024-01-04", "2024-01-10", "2024-01-16")
 #' removals <- c.Date("2024-01-08", NA, NA, NA)
@@ -59,7 +61,7 @@ wl_referral_stats <- function(waiting_list,
 
   inter_arrival_times <- diff(arrival_dates, lags = -1)
   mean_arrival <- as.numeric(mean(inter_arrival_times))
-  sd_arrival <- stats::sd(inter_arrival_times)
+  sd_arrival <- sd(inter_arrival_times)
   cv_arrival <- sd_arrival / mean_arrival
   num_arrivals <- length(inter_arrival_times)
   demand <- 1 / mean_arrival

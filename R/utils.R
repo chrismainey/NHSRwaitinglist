@@ -1,4 +1,8 @@
 #' Check Class of Argument Inputs
+#'
+#' @description
+#' A function for checking classes'
+#'
 #' @param ... Objects to be checked for class.
 #' @param .expected_class Character. The name of the class against which objects
 #'     should be checked.
@@ -68,7 +72,7 @@ check_class <- function(
 
 #' Check format of input date arguments
 #'
-#' First calls [check_class()] to error if not `Date` or `character`.
+#' First calls `check_class` to error if not `Date` or `character`.
 #'
 #' Then tries to coerce to `Date`, reporting if a provided string is not in
 #' an unambiguous format.

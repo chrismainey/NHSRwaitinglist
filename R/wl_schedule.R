@@ -16,6 +16,8 @@
 #' @param unscheduled logical.
 #'  If TRUE, returns a list of scheduled and unscheduled procedures
 #'  If FALSE, only returns the updated waiting list
+#' @param restore_types  Internal function to restore types exactly to previous
+#' version in testing
 #'
 #' @return The updated waiting list with removal dates assigned based on
 #'   the given schedule, either as a single \code{data.frame} (default) or as
@@ -33,6 +35,8 @@
 #'        patient, \code{0} if not.}
 #'    }
 #'
+#' @import data.table
+#'
 #' @export
 #'
 #'
@@ -48,7 +52,8 @@ wl_schedule <- function(
   schedule,
   referral_index = 1,
   removal_index = 2,
-  unscheduled = FALSE
+  unscheduled = FALSE,
+  restore_types = TRUE
 ) {
 
   # Error handle
@@ -60,57 +65,96 @@ wl_schedule <- function(
     schedule <- as.Date(schedule)
   }
 
-  # split waiters and removed
-  wl <- waiting_list[is.na(waiting_list[, removal_index]), ]
-  wl_removed <- waiting_list[!(is.na(waiting_list[, removal_index])), ]
+  # Precompute column names
+  referral_col <- names(waiting_list)[referral_index]
+  removal_col  <- names(waiting_list)[removal_index]
+
+  # Split waiters and removed
+  wl <- waiting_list[is.na(waiting_list[[removal_col]]), ]
+  wl_removed <- waiting_list[!is.na(waiting_list[[removal_col]]), ]
   rownames(wl) <- NULL
 
-  # schedule
   if (!unscheduled) {
-    i <- 1
-    for (op in as.list(schedule)) {
-      if (op > wl[i, referral_index] && i <= nrow(wl)) {
-        wl[i, removal_index] <- op
-        i <- i + 1
+    # Local copies for faster in-loop access
+    ref <- wl[[referral_col]]
+    rem <- wl[[removal_col]]
+    n_wl <- length(ref)
+
+    i <- 1L
+    for (op in schedule) {
+      if (op > ref[i] & i <= n_wl) {
+        rem[i] <- op
+        i <- i + 1L
       }
     }
 
-    # Ensure date format
-    #wl$Removal <- as.Date(wl$Removal)
-    wl[, removal_index] <- as.Date(wl[, removal_index])
+    # Only convert if needed
+    if (!inherits(rem, "Date")) rem <- as.Date(rem)
+    wl[[removal_col]] <- rem
 
-    # recombine to update list
-    updated_list <- rbind(wl_removed, wl)
-    updated_list <- updated_list[order(updated_list[, referral_index]), ]
-    return(updated_list)
+    # Fast combine + sort
+    library(data.table)
+    updated_dt <- rbindlist(list(as.data.table(wl_removed)
+                                 , as.data.table(wl)), use.names = TRUE)
+    setorderv(updated_dt, referral_col)
+
+    updated_df <- as.data.frame(updated_dt, stringsAsFactors = FALSE)
+    rownames(updated_df) <- seq_len(nrow(updated_df))
+
+    # Optional strict type restoration
+    if (restore_types) {
+      for (col in seq_along(updated_df)) {
+        if (is.factor(waiting_list[[col]])) {
+          updated_df[[col]] <- factor(updated_df[[col]]
+                                      , levels = levels(waiting_list[[col]]))
+        } else {
+          class(updated_df[[col]]) <- class(waiting_list[[col]])
+        }
+      }
+    }
+
+    return(updated_df)
+
   } else {
-    scheduled <- data.frame(
-      schedule = schedule,
-      scheduled = rep(0, length(schedule))
-    )
-    i <- 1
-    j <- 0
-    for (op in as.list(schedule)) {
-      j <- j + 1
-      if (op > wl[i, referral_index] && i <= nrow(wl)) {
-        wl[i, removal_index] <- op
-        i <- i + 1
-        scheduled[j, 2] <- 1
+    scheduled <- data.frame(schedule = schedule
+                            , scheduled = integer(length(schedule)))
+
+    ref <- wl[[referral_col]]
+    rem <- wl[[removal_col]]
+    n_wl <- length(ref)
+
+    i <- 1L
+    j <- 0L
+    for (op in schedule) {
+      j <- j + 1L
+      if (op > ref[i] & i <= n_wl) {
+        rem[i] <- op
+        i <- i + 1L
+        scheduled[j, 2] <- 1L
       }
     }
 
+    if (!inherits(rem, "Date")) rem <- as.Date(rem)
+    wl[[removal_col]] <- rem
 
+    updated_dt <- rbindlist(list(as.data.table(wl_removed), as.data.table(wl))
+                            , use.names = TRUE)
+    setorderv(updated_dt, referral_col)
 
-    # Ensure date format
-    #wl$Removal <- as.Date(wl$Removal)
-    wl[, removal_index] <- as.Date(wl[, removal_index])
+    updated_df <- as.data.frame(updated_dt, stringsAsFactors = FALSE)
+    rownames(updated_df) <- seq_len(nrow(updated_df))
 
-    # recombine to update list
-    updated_list <- rbind(wl_removed, wl)
-    updated_list <- updated_list[order(updated_list[, referral_index]), ]
+    if (restore_types) {
+      for (col in seq_along(updated_df)) {
+        if (is.factor(waiting_list[[col]])) {
+          updated_df[[col]] <- factor(updated_df[[col]]
+                                      , levels = levels(waiting_list[[col]]))
+        } else {
+          class(updated_df[[col]]) <- class(waiting_list[[col]])
+        }
+      }
+    }
 
-    # scheduled[scheduled$scheduled = 1, 1]
-
-    return(list(updated_list, scheduled))
+    return(list(updated_df, scheduled))
   }
 }

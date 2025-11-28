@@ -1,15 +1,15 @@
 
 # Test for valid inputs and output structure
-test_that("create_waiting_list returns a tibble with correct columns", {
+test_that("create_waiting_list returns a data.frame with correct columns", {
   result <- create_waiting_list(10, 50, 21, "2024-01-01")
 
   em <- "create_waiting_list(): returns wrong class"
-  # Check if the result is a tibble
-  expect_s3_class(result, "tbl_df")
+  # Check if the result is a data.frame
+  expect_s3_class(result, "data.frame")
 
   em <- 'create_waiting_list(): does not have expected column names: "pat_id"
   , "addition_date", "removal_date", "wait_length", "rott"'
-  # Check if the returned tibble has the correct columns
+  # Check if the returned data.frame has the correct columns
   expected_columns <- c("pat_id", "addition_date", "removal_date"
                         , "wait_length", "rott")
   expect_true(all(expected_columns %in% colnames(result)))
