@@ -59,7 +59,8 @@ I.e. earlier referrals are scheduled first (FIFO).</p>
 <span>  <span class="va">schedule</span>,</span>
 <span>  referral_index <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  removal_index <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  unscheduled <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  unscheduled <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  restore_types <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -91,6 +92,11 @@ removal dates</p></dd>
 <dd><p>logical.
 If TRUE, returns a list of scheduled and unscheduled procedures
 If FALSE, only returns the updated waiting list</p></dd>
+
+
+<dt id="arg-restore-types">restore_types<a class="anchor" aria-label="anchor" href="#arg-restore-types"></a></dt>
+<dd><p>Internal function to restore types exactly to previous
+version in testing</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -131,7 +137,7 @@ patient, <code>0</code> if not.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
